@@ -49,19 +49,27 @@ export default function ConsumerInquiry() {
   const [answers, setAnswers] = useState<QuestionAnswer[]>([]);
   const [loading, setLoading] = useState(true);
 
+  console.log('ConsumerInquiry component rendered with consumerId:', consumerId);
+  console.log('Current URL:', window.location.pathname);
+
   useEffect(() => {
     fetchConsumerData();
   }, [consumerId]);
 
   const fetchConsumerData = async () => {
-    if (!consumerId) {
-      console.log('No consumerId provided');
-      return;
-    }
-
-    // Check if consumerId is the literal parameter name
-    if (consumerId === ':consumerId') {
-      console.log('Invalid URL - contains literal parameter name');
+    console.log('fetchConsumerData called with consumerId:', consumerId);
+    console.log('URL params object:', { consumerId });
+    
+    if (!consumerId || consumerId === ':consumerId' || consumerId.includes(':')) {
+      console.log('Invalid consumerId detected:', consumerId);
+      // Let's try to get available consumer IDs to help debug
+      const { data: allConsumers } = await supabase
+        .from('survey_responses')
+        .select('consumer_id')
+        .limit(5);
+      
+      console.log('Available consumers in database:', allConsumers);
+      
       toast({
         title: "Invalid Consumer ID",
         description: "Please navigate from the Dashboard to view consumer details",
@@ -70,16 +78,39 @@ export default function ConsumerInquiry() {
       return;
     }
 
-    console.log('Raw consumerId from params:', consumerId);
-    console.log('Searching for consumer_id:', `Consumer #${consumerId}`);
+    // Try both with and without "Consumer #" prefix in case the URL already has the number
+    const searchIds = [
+      consumerId.startsWith('Consumer #') ? consumerId : `Consumer #${consumerId}`,
+      consumerId
+    ];
+    
+    console.log('Searching for consumer with IDs:', searchIds);
 
     try {
-      // Fetch survey response
-      const { data: responseData, error: responseError } = await supabase
+      let responseData = null;
+      let responseError = null;
+
+      // Try first search pattern
+      const result1 = await supabase
         .from('survey_responses')
         .select('*')
-        .eq('consumer_id', `Consumer #${consumerId}`)
+        .eq('consumer_id', searchIds[0])
         .maybeSingle();
+        
+      if (result1.data) {
+        responseData = result1.data;
+      } else if (searchIds[1] !== searchIds[0]) {
+        // Try second search pattern
+        const result2 = await supabase
+          .from('survey_responses')
+          .select('*')
+          .eq('consumer_id', searchIds[1])
+          .maybeSingle();
+        responseData = result2.data;
+        responseError = result2.error;
+      } else {
+        responseError = result1.error;
+      }
 
       console.log('Supabase response:', responseData, responseError);
 
@@ -168,14 +199,27 @@ export default function ConsumerInquiry() {
   if (!response) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-4">
-        <div className="max-w-4xl mx-auto py-8 text-center">
+        <div className="max-w-4xl mx-auto py-8 text-center space-y-4">
           <h1 className="text-2xl font-bold text-muted-foreground">Consumer not found</h1>
-          <Link to="/dashboard">
-            <Button className="mt-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </Link>
+          <p className="text-muted-foreground">
+            {consumerId?.includes(':') 
+              ? "You're viewing a template URL. Please navigate from the Dashboard to view actual consumer details."
+              : `No consumer found with ID: ${consumerId}`
+            }
+          </p>
+          <div className="space-x-4">
+            <Link to="/dashboard">
+              <Button>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Go to Dashboard
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button variant="outline">
+                Take Survey First
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
