@@ -68,7 +68,7 @@ export default function ConsumerInquiry() {
         .from('survey_responses')
         .select('*')
         .eq('consumer_id', `Consumer #${consumerId}`)
-        .single();
+        .maybeSingle();
 
       console.log('Supabase response:', responseData, responseError);
 
