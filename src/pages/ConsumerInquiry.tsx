@@ -59,6 +59,17 @@ export default function ConsumerInquiry() {
       return;
     }
 
+    // Check if consumerId is the literal parameter name
+    if (consumerId === ':consumerId') {
+      console.log('Invalid URL - contains literal parameter name');
+      toast({
+        title: "Invalid Consumer ID",
+        description: "Please navigate from the Dashboard to view consumer details",
+        variant: "destructive",
+      });
+      return;
+    }
+
     console.log('Raw consumerId from params:', consumerId);
     console.log('Searching for consumer_id:', `Consumer #${consumerId}`);
 
@@ -79,6 +90,17 @@ export default function ConsumerInquiry() {
           description: "Failed to fetch consumer data",
           variant: "destructive",
         });
+        return;
+      }
+
+      if (!responseData) {
+        console.log('No consumer found with ID:', consumerId);
+        toast({
+          title: "Consumer Not Found",
+          description: `No consumer found with ID: Consumer #${consumerId}`,
+          variant: "destructive",
+        });
+        setResponse(null);
         return;
       }
 
