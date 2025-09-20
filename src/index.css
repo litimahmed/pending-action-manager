@@ -2,87 +2,155 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Corporate Survey Design System - Professional, Formal, Clean */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Corporate Typography */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    
+    /* Professional corporate colors */
+    --background: 250 250% 99%;
+    --foreground: 215 25% 27%;
 
+    /* Corporate primary - Professional navy blue */
+    --primary: 214 84% 20%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 214 84% 16%;
+
+    /* Clean secondary colors */
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 215 25% 27%;
+    --secondary-hover: 220 15% 90%;
+
+    /* Muted professional grays */
+    --muted: 220 13% 95%;
+    --muted-foreground: 215 15% 50%;
+
+    /* Corporate card styling */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 27%;
+    --card-border: 220 13% 85%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Professional form inputs */
+    --input: 0 0% 100%;
+    --input-border: 220 13% 80%;
+    --input-focus: 214 84% 20%;
+    
+    /* Clean borders and focus states */
+    --border: 220 13% 85%;
+    --ring: 214 84% 20%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Professional accent */
+    --accent: 220 15% 97%;
+    --accent-foreground: 215 25% 27%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Status colors - corporate appropriate */
+    --success: 142 50% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 80% 50%;
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    /* Corporate shadows - subtle and professional */
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-form: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    /* Professional spacing and radius */
     --radius: 0.5rem;
 
+    /* Card backgrounds for survey containers */
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 18%;
+    --card-border: 220 13% 91%;
+
+    /* Professional blue primary colors */
+    --primary: 217 91% 25%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 20%;
+
+    /* Subtle secondary colors for form elements */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 9% 46%;
+    --secondary-hover: 220 14% 92%;
+
+    /* Muted colors for supporting text */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Professional accent colors */
+    --accent: 210 40% 98%;
+    --accent-foreground: 220 13% 18%;
+
+    /* Form inputs and borders */
+    --input: 0 0% 100%;
+    --input-border: 220 13% 87%;
+    --input-focus: 217 91% 60%;
+    
+    /* Professional borders */
+    --border: 220 13% 91%;
+    --ring: 217 91% 60%;
+
+    /* Status colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Professional shadows and spacing */
+    --shadow-card: 0 2px 8px 0 hsla(220, 13%, 18%, 0.08);
+    --shadow-input: 0 1px 3px 0 hsla(220, 13%, 18%, 0.1);
+    --radius-card: 0.75rem;
+    --radius-input: 0.5rem;
+
+    --radius: var(--radius-card);
+
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 220 13% 18%;
+    --foreground: 0 0% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 13% 16%;
+    --card-foreground: 0 0% 98%;
+    --card-border: 220 13% 26%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 65%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 26%;
+    --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 220 13% 30%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --muted: 220 13% 26%;
+    --muted-foreground: 220 9% 65%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 220 13% 26%;
+    --accent-foreground: 0 0% 98%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --input: 220 13% 26%;
+    --input-border: 220 13% 35%;
+    --input-focus: 217 91% 60%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 26%;
+    --ring: 217 91% 60%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --success: 142 71% 50%;
+    --warning: 38 92% 55%;
+    --destructive: 0 84% 65%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
