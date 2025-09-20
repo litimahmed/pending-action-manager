@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 export const DashboardButton = () => {
   return (
-    <Link to="/dashboard">
+    <Link to="/survey">
       <Button variant="outline" size="sm" className="flex items-center gap-2">
         <BarChart3 className="w-4 h-4" />
-        View Dashboard
+        View Survey
       </Button>
     </Link>
   );
