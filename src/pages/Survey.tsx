@@ -10,6 +10,7 @@ import { SurveyHeader } from "@/components/SurveyHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { marketResearchSurvey } from "@/lib/surveyData";
+// Force cache refresh
 
 export default function Survey() {
   const [interviewerName, setInterviewerName] = useState("");
