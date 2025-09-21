@@ -13,12 +13,9 @@ import { marketResearchSurvey } from "@/lib/surveyData";
 // Force cache refresh
 
 export default function Survey() {
-  const [interviewerName, setInterviewerName] = useState("");
-  const [consumerName, setConsumerName] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [surveyStarted, setSurveyStarted] = useState(false);
   const [savedSurveys, setSavedSurveys] = useState<any[]>([]);
   const { toast } = useToast();
 
@@ -41,17 +38,6 @@ export default function Survey() {
     }
   };
 
-  const startSurvey = () => {
-    if (!interviewerName.trim()) {
-      toast({
-        title: "Missing Information",
-        description: "Please enter interviewer name.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setSurveyStarted(true);
-  };
 
   const handleAnswer = (answer: any, questionId: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
@@ -82,8 +68,8 @@ export default function Survey() {
     setIsSubmitting(true);
     try {
       const surveyData = {
-        interviewer_name: interviewerName,
-        consumer_name: consumerName || 'Anonymous',
+        interviewer_name: 'Anonymous',
+        consumer_name: 'Consumer',
         survey_data: {
           answers,
           completed_at: new Date().toISOString(),
@@ -106,9 +92,6 @@ export default function Survey() {
       // Reset form
       setAnswers({});
       setCurrentStep(0);
-      setSurveyStarted(false);
-      setInterviewerName("");
-      setConsumerName("");
       
       // Reload saved surveys
       loadSavedSurveys();
@@ -125,88 +108,6 @@ export default function Survey() {
     }
   };
 
-  if (!surveyStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-4">
-        <div className="max-w-4xl mx-auto py-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Interview Survey System</h1>
-            <p className="text-muted-foreground text-lg">
-              Conduct consumer interviews and save responses to Supabase
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Start New Survey */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Start New Survey</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="interviewer">Interviewer Name *</Label>
-                  <Input
-                    id="interviewer"
-                    value={interviewerName}
-                    onChange={(e) => setInterviewerName(e.target.value)}
-                    placeholder="Enter your name"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="consumer">Consumer Name (Optional)</Label>
-                  <Input
-                    id="consumer"
-                    value={consumerName}
-                    onChange={(e) => setConsumerName(e.target.value)}
-                    placeholder="Enter consumer's name"
-                  />
-                </div>
-                <Button 
-                  onClick={startSurvey}
-                  className="w-full"
-                  size="lg"
-                >
-                  Start Interview
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Saved Surveys */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Saved Surveys ({savedSurveys.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {savedSurveys.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">
-                      No surveys saved yet
-                    </p>
-                  ) : (
-                    savedSurveys.map((survey) => (
-                      <div 
-                        key={survey.id}
-                        className="border rounded-lg p-3 space-y-1"
-                      >
-                        <div className="font-medium">{survey.interviewer_name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          Consumer: {survey.consumer_name || 'Anonymous'}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {new Date(survey.created_at).toLocaleString()}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const currentStepData = marketResearchSurvey.steps[currentStep];
   const isLastQuestion = currentStep === marketResearchSurvey.steps.length - 1;
 
@@ -214,16 +115,22 @@ export default function Survey() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
       <SurveyHeader 
         title="Consumer Interview Survey"
-        description={`Interviewer: ${interviewerName} | Consumer: ${consumerName || 'Anonymous'}`}
+        description="Answer all questions to complete the survey"
       />
       
       <div className="max-w-4xl mx-auto px-4 py-6">
-        <ProgressIndicator 
-          currentStep={currentStep + 1}
-          totalSteps={marketResearchSurvey.steps.length}
-        />
+        <div className="flex justify-between items-center mb-6">
+          <ProgressIndicator 
+            currentStep={currentStep + 1}
+            totalSteps={marketResearchSurvey.steps.length}
+          />
+          
+          <div className="text-sm text-muted-foreground">
+            Saved surveys: {savedSurveys.length}
+          </div>
+        </div>
         
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center mb-6">
           <h2 className="text-xl font-semibold text-foreground">
             {currentStepData.title}
           </h2>
